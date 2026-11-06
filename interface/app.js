@@ -111,7 +111,7 @@ async function changerOnglet() {
 function afficher() {
   const vue = document.getElementById("vue");
   const rendus = { journal: vueJournal, recettes: vueRecettes, idees: vueIdees, ardoise: vueArdoise, carte: vueCarte };
-  vue.replaceChildren(...[rendus[etat.onglet]()].flat());
+  vue.replaceChildren(...[rendus[etat.onglet]()].flat().filter(x => x !== null && x !== undefined && x !== false));
   const titre = ONGLETS.find(o => o.id === etat.onglet).nom;
   document.title = `${titre} · TitonTambouille`;
 }
@@ -307,7 +307,7 @@ function vueRecettes() {
 
   const choisie = donnees.find(r => r.id === etat.recette);
   return h("div", { class: "recettes" },
-    h("aside", { class: "index", "aria-label": "Index des recettes" }, h("label", { for: "cherche-r", class: "etiquette" }, "Chercher"), recherche, index, goutsFoyer()),
+    h("aside", { class: "index", "aria-label": "Index des recettes" }, h("label", { for: "cherche-r", class: "etiquette" }, "Chercher"), recherche, index),
     h("div", { class: "colonne-recette" },
       h("h1", { class: "titre-vue" }, "Recettes"),
       bandeauExemple("recettes"),
@@ -321,7 +321,7 @@ function cases(n) {
 function goutsFoyer() {
   const membres = ((etat.onglets.foyer || {}).membres || []).filter(m => (m.gouts || []).length);
   if (!membres.length) return null;
-  return h("div", { class: "gouts" },
+  return h("section", { class: "gouts", "aria-label": "Goûts du foyer" },
     h("h2", { class: "titre-jour" }, "Goûts du foyer"),
     membres.map(m => h("div", { class: "gouts-membre" }, h("b", {}, m.initiale),
       h("ul", {}, m.gouts.slice().sort((a, b) => b.niveau - a.niveau).map(g =>
@@ -383,6 +383,7 @@ function vueIdees() {
   return [
     titreVue("Idées"),
     bandeauExemple("idees"),
+    goutsFoyer(),
     h("div", { class: "filtres", role: "group", "aria-label": "Filtrer les idées" }, filtres.map(([id, lib]) =>
       h("button", { type: "button", class: "bouton-texte", "aria-pressed": String(etat.filtreIdees === id), onclick: () => { etat.filtreIdees = id; afficher(); } }, lib))),
     visibles.length ? h("ul", { class: "idees" }, visibles.map(i => {

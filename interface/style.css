@@ -148,7 +148,8 @@ figure.vignette figcaption { font-size: 12px; color: var(--gris); font-style: it
 .notes p { margin: 0; font-size: 16px; line-height: 1.6; }
 
 .gouts { display: flex; flex-direction: column; gap: 10px; }
-.gouts-membre { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 8px; align-items: start; padding: 0 12px; }
+.gouts-membre { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 8px; align-items: start; }
+.gouts-membre ul { display: flex; flex-wrap: wrap; gap: 6px 18px !important; flex-direction: row !important; }
 .gouts-membre b { font-size: 15px; }
 .gouts-membre ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
 .gouts-membre li { display: flex; gap: 8px; align-items: center; font-size: 14px; }
