@@ -80,7 +80,7 @@ const ONGLETS = [
   { id: "carte", nom: "Carte" },
 ];
 
-const etat = { onglet: "journal", entrees: [], onglets: null, recette: null, recherche: "", filtreIdees: "a_tester", filtreLieux: "tout" };
+const etat = { onglet: "journal", entrees: [], digestion: null, onglets: null, recette: null, recherche: "", filtreIdees: "a_tester", filtreLieux: "tout" };
 
 function construireNavigation() {
   for (const nav of document.querySelectorAll(".onglets")) {
@@ -152,7 +152,7 @@ function vueJournal() {
         choixPhotos),
       h("button", { type: "submit", class: "bouton", id: "noter" }, "Noter")));
 
-  const vue = [titreVue("Journal", aujourdhui()), formulaire, listeJours()];
+  const vue = [titreVue("Journal", aujourdhui()), formulaire, panneauDigestion(), listeJours()];
   queueMicrotask(majBrouillon);
   return vue;
 }
@@ -246,8 +246,36 @@ function vueEntree(e) {
 }
 
 async function chargerJournal() {
-  const d = await api("/api/journal");
+  const [d, g] = await Promise.all([api("/api/journal"), api("/api/digestion").catch(() => null)]);
   etat.entrees = d.entrees;
+  etat.digestion = g;
+}
+
+function dateHeure(iso) {
+  const d = new Date(iso);
+  return `${d.getDate() === 1 ? "1er" : d.getDate()} ${MOIS_COURT[d.getMonth()]} à ${d.getHours()} h ${String(d.getMinutes()).padStart(2, "0")}`;
+}
+
+function panneauDigestion() {
+  const g = etat.digestion;
+  if (!g) return null;
+  const derniere = (g.historique || []).find(d => !d.annulee);
+  const enAttente = g.a_digerer ? h("p", { class: "attente-digestion" },
+    `${g.a_digerer} entrée${g.a_digerer > 1 ? "s" : ""} pas encore digérée${g.a_digerer > 1 ? "s" : ""} · demande à Claude : « digère TitonTambouille »`) : null;
+  if (!derniere) return enAttente ? h("section", { class: "digestion", "aria-label": "Digestion" }, enAttente) : null;
+  const bouton = h("button", { type: "button", class: "bouton-texte" }, "Annuler cette digestion");
+  bouton.addEventListener("click", async () => {
+    if (!bouton.dataset.confirme) { bouton.dataset.confirme = "1"; bouton.textContent = "Confirmer l'annulation"; return; }
+    try { await api("/api/digestion/annuler", { method: "POST" }); etat.onglets = null; await chargerJournal(); afficher(); annoncer("Digestion annulée."); }
+    catch (e) { annoncer(`Annulation impossible : ${e.message}`); }
+  });
+  const n = derniere.modifications.length;
+  return h("section", { class: "digestion", "aria-label": "Digestion" },
+    enAttente,
+    h("details", {},
+      h("summary", {}, `Dernière digestion · ${dateHeure(derniere.date)} · ${n} modification${n > 1 ? "s" : ""}`),
+      h("ul", {}, derniere.modifications.map(m => h("li", {}, m))),
+      bouton));
 }
 
 // ------------------------------------------------------------------ recettes
@@ -267,7 +295,7 @@ function vueRecettes() {
       h("h2", { class: "titre-jour" }, cat),
       h("ul", {}, visibles.filter(r => (r.categorie || "Autres") === cat).map(r => {
         const hors = !enSaison(r.saison);
-        const meta = hors ? `hors saison · ${r.saison.texte}` : `${r.fois} fois · ${dateCourte(r.derniere)}`;
+        const meta = hors ? `hors saison · ${r.saison.texte}` : (r.fois ? `${r.fois} fois · ${dateCourte(r.derniere)}` : "pas encore cuisinée");
         return h("li", {}, h("a", { href: "#recettes", class: hors ? "hors-saison" : null, "aria-current": r.id === etat.recette ? "true" : null,
           onclick: ev => { ev.preventDefault(); etat.recette = r.id; afficher(); } },
           h("span", { class: "nom" }, r.nom), h("span", { class: "meta" }, meta)));
@@ -279,11 +307,25 @@ function vueRecettes() {
 
   const choisie = donnees.find(r => r.id === etat.recette);
   return h("div", { class: "recettes" },
-    h("aside", { class: "index", "aria-label": "Index des recettes" }, h("label", { for: "cherche-r", class: "etiquette" }, "Chercher"), recherche, index),
+    h("aside", { class: "index", "aria-label": "Index des recettes" }, h("label", { for: "cherche-r", class: "etiquette" }, "Chercher"), recherche, index, goutsFoyer()),
     h("div", { class: "colonne-recette" },
       h("h1", { class: "titre-vue" }, "Recettes"),
       bandeauExemple("recettes"),
       choisie ? ficheRecette(choisie) : h("p", { class: "vide" }, "Aucune recette pour l'instant.")));
+}
+
+function cases(n) {
+  return h("span", { class: "cases", "aria-hidden": "true" }, [1, 2, 3].map(i => h("span", { class: i <= n ? "plein" : null })));
+}
+
+function goutsFoyer() {
+  const membres = ((etat.onglets.foyer || {}).membres || []).filter(m => (m.gouts || []).length);
+  if (!membres.length) return null;
+  return h("div", { class: "gouts" },
+    h("h2", { class: "titre-jour" }, "Goûts du foyer"),
+    membres.map(m => h("div", { class: "gouts-membre" }, h("b", {}, m.initiale),
+      h("ul", {}, m.gouts.slice().sort((a, b) => b.niveau - a.niveau).map(g =>
+        h("li", { title: g.note || null }, h("span", { role: "img", "aria-label": `${g.niveau} sur 3` }, cases(g.niveau)), h("span", {}, g.aliment)))))));
 }
 
 function ficheRecette(r) {
@@ -319,7 +361,7 @@ function ficheRecette(r) {
   return h("article", { class: "fiche-recette" },
     h("header", { style: "display: flex; flex-direction: column; gap: 8px" },
       h("h2", {}, r.nom),
-      h("p", { class: "sous-ligne" }, `Cuisiné ${r.fois} fois · dernière fois le ${dateCourte(r.derniere)}`)),
+      h("p", { class: "sous-ligne" }, r.fois ? `Cuisiné ${r.fois} fois · dernière fois le ${dateCourte(r.derniere)}` : "Pas encore cuisinée")),
     lignes.length ? h("section", { class: "fiche", "aria-label": "Fiche" }, lignes) : null,
     cadre,
     r.photos && r.photos.length ? h("section", { class: "section" }, h("h3", {}, "Photos"),
@@ -361,14 +403,23 @@ function vueArdoise() {
   const a = etat.onglets.ardoise || { jours: [], repas_a_prevoir: {} };
   const prefs = a.repas_a_prevoir || {};
   const choix = [["soirs", "Soirs"], ["midis_week_end", "Midis du week-end"], ["midis_semaine", "Midis en semaine"], ["entrees", "Entrées"]];
-  const bientot = () => annoncer("Arrive avec la digestion du journal.");
+  const bientot = () => annoncer("Demande à Claude une autre proposition pour ce repas.");
+  const enregistrer = async (message) => {
+    try {
+      etat.onglets.ardoise = await api("/api/ardoise/preferences", { method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ repas_a_prevoir: prefs, contraintes: document.getElementById("envies").value }) });
+      etat.onglets.exemples = etat.onglets.exemples.filter(x => x !== "ardoise");
+      afficher();
+      if (message) annoncer(message);
+    } catch (e) { annoncer(`Pas enregistré : ${e.message}`); }
+  };
   return [
     titreVue("Ardoise"),
     bandeauExemple("ardoise"),
-    h("form", { class: "preferences", onsubmit: e => { e.preventDefault(); bientot(); } },
+    h("form", { class: "preferences", onsubmit: e => { e.preventDefault(); enregistrer("C'est noté. Demande à Claude : « propose ma semaine »."); } },
       h("div", { class: "ligne" }, h("span", { class: "etiquette", id: "repas-l" }, "Repas à prévoir"),
         h("div", { class: "filtres", role: "group", "aria-labelledby": "repas-l" }, choix.map(([id, lib]) =>
-          h("button", { type: "button", class: "bouton-texte", "aria-pressed": String(!!prefs[id]), onclick: bientot }, prefs[id] ? `✓ ${lib}` : lib)))),
+          h("button", { type: "button", class: "bouton-texte", "aria-pressed": String(!!prefs[id]), onclick: () => { prefs[id] = !prefs[id]; enregistrer(); } }, prefs[id] ? `✓ ${lib}` : lib)))),
       h("div", { class: "ligne" }, h("label", { class: "etiquette", for: "envies" }, "Cette semaine"),
         h("div", { class: "champ" }, h("input", { type: "text", id: "envies", placeholder: "soirs pressés, envies, invités…", value: a.contraintes || "" }),
           h("button", { type: "submit", class: "bouton" }, "Proposer ma semaine")))),
@@ -387,6 +438,12 @@ function vueArdoise() {
 
 const NOMS_TYPES = { restaurant: "resto", a_emporter: "à emporter", cafe: "café", marche: "marché", commerce: "commerce" };
 
+function resumeLieu(l) {
+  const m = l.mentions || [];
+  if (!m.length) return "";
+  return `${dateCourte(m[0].date)} · ${m[0].texte}${m.length > 1 ? ` · ${m.length} mentions` : ""}`;
+}
+
 function vueCarte() {
   const lieux = (etat.onglets.lieux || {}).lieux || [];
   const filtres = [["tout", "Tout"], ["restaurant", "Restaurants"], ["a_emporter", "À emporter"], ["cafe", "Cafés"], ["marche", "Marchés et commerces"]];
@@ -403,7 +460,8 @@ function vueCarte() {
         h("h2", { class: "titre-jour" }, `${visibles.length} lieu${visibles.length > 1 ? "x" : ""}`),
         h("ul", {}, visibles.map(l => h("li", {},
           h("span", { class: "tete" }, h("span", { class: "nom" }, l.nom), h("span", { class: "type" }, NOMS_TYPES[l.type] || l.type)),
-          h("span", { class: "meta" }, l.resume)))))),
+          h("span", { class: "meta" }, l.resume || resumeLieu(l)),
+          l.adresse ? h("span", { class: "meta" }, l.adresse) : null))))),
   ];
 }
 

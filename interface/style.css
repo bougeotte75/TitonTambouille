@@ -56,7 +56,7 @@ h1 { margin: 0; font-size: 44px; font-weight: 700; letter-spacing: 0.02em; }
 
 /* ---------------------------------------------------------------- journal : saisie */
 .saisie { display: flex; flex-direction: column; gap: 12px; }
-.saisie textarea { width: 100%; font-size: 18px; line-height: 1.6; background: #fff; border: 1px solid var(--contour); padding: 18px 20px; resize: vertical; }
+.saisie textarea { width: 100%; font-size: 16px; line-height: 1.6; background: #fff; border: 1px solid var(--contour); padding: 18px 20px; resize: vertical; }
 .saisie .actions { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .saisie .outils { display: flex; gap: 4px; }
 .en-attente { display: flex; flex-wrap: wrap; gap: 12px; }
@@ -71,6 +71,13 @@ h1 { margin: 0; font-size: 44px; font-weight: 700; letter-spacing: 0.02em; }
 .liens-attente:empty { display: none; }
 .liens-attente li { display: flex; align-items: center; gap: 8px; font-size: 14px; }
 .liens-attente .retirer { width: 32px; height: 32px; background: #fff; border: 1px solid var(--contour); cursor: pointer; padding: 0; display: inline-flex; align-items: center; justify-content: center; }
+
+/* ---------------------------------------------------------------- digestion */
+.digestion { display: flex; flex-direction: column; gap: 10px; font-size: 14px; color: var(--gris); }
+.attente-digestion { margin: 0; }
+.digestion details { border: 1px solid var(--contour); padding: 10px 14px; }
+.digestion summary { cursor: pointer; min-height: 24px; }
+.digestion ul { margin: 12px 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; color: var(--encre); }
 
 /* ---------------------------------------------------------------- journal : entrées */
 .jours { display: flex; flex-direction: column; gap: 40px; }
@@ -140,6 +147,12 @@ figure.vignette figcaption { font-size: 12px; color: var(--gris); font-style: it
 .notes .ctx { font-size: 13px; color: var(--gris); font-style: italic; }
 .notes p { margin: 0; font-size: 16px; line-height: 1.6; }
 
+.gouts { display: flex; flex-direction: column; gap: 10px; }
+.gouts-membre { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 8px; align-items: start; padding: 0 12px; }
+.gouts-membre b { font-size: 15px; }
+.gouts-membre ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.gouts-membre li { display: flex; gap: 8px; align-items: center; font-size: 14px; }
+
 /* ---------------------------------------------------------------- idées */
 .idees { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 22px; }
 .idee { display: flex; flex-direction: column; gap: 6px; padding-bottom: 22px; border-bottom: 1px solid #ededed; }
@@ -198,7 +211,7 @@ figure.vignette figcaption { font-size: 12px; color: var(--gris); font-style: it
   .onglets-bas a span { font-size: 11px; }
   .onglets-bas a[aria-current="page"] { color: var(--encre); }
   .onglets-bas a[aria-current="page"] span { font-weight: 700; border-bottom: 2px solid var(--accent); padding-bottom: 1px; }
-  .saisie textarea { font-size: 17px; padding: 14px 16px; }
+  .saisie textarea { font-size: 16px; padding: 14px 16px; }
   .medias .liens { flex-basis: 100%; border-left: none; padding-left: 0; }
   figure.vignette, .vignette-attente { width: 110px; }
   figure.vignette img, .vignette-attente img { width: 110px; height: 80px; }

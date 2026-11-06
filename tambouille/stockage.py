@@ -51,15 +51,25 @@ def chemin_photo(nom: str) -> Path | None:
 
 
 def lire_onglets() -> dict:
-    """Renvoie les données de tous les onglets, en signalant celles qui sont des exemples."""
+    """Renvoie les données de tous les onglets.
+
+    Tant qu'aucune digestion n'a eu lieu, un onglet sans fichier affiche les exemples ;
+    ensuite, il affiche ses vraies données, même vides.
+    """
+    from .digestion import VIDES
+    deja_digere = (config.DOSSIER_DONNEES / "historique.json").exists() \
+        or (config.DOSSIER_DONNEES / "digestion.json").exists()
     donnees: dict = {"exemples": []}
     for nom in config.ONGLETS:
         propre = config.DOSSIER_DONNEES / f"{nom}.json"
-        source = propre if propre.exists() else config.DOSSIER_EXEMPLES / f"{nom}.json"
-        if source != propre:
-            donnees["exemples"].append(nom)
         try:
-            donnees[nom] = json.loads(source.read_text(encoding="utf-8"))
+            if propre.exists():
+                donnees[nom] = json.loads(propre.read_text(encoding="utf-8"))
+            elif deja_digere:
+                donnees[nom] = json.loads(json.dumps(VIDES[nom]))
+            else:
+                donnees[nom] = json.loads((config.DOSSIER_EXEMPLES / f"{nom}.json").read_text(encoding="utf-8"))
+                donnees["exemples"].append(nom)
         except (OSError, json.JSONDecodeError):
             donnees[nom] = None
     return donnees

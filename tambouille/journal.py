@@ -142,6 +142,17 @@ def formater_entree(entree: Entree) -> str:
     return "\n".join(lignes) + "\n"
 
 
+PARAMETRES_PISTAGE = re.compile(r"^(utm_\w+|gclid|gbraid|wbraid|gad_source|gad_campaignid|fbclid|msclkid|mc_cid|mc_eid)$")
+
+
+def nettoyer_url(url: str) -> str:
+    """Retire d'un lien les paramètres de pistage publicitaire (utm_…, gclid…)."""
+    from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
+    parties = urlsplit(url.strip())
+    garder = [(k, v) for k, v in parse_qsl(parties.query, keep_blank_values=True) if not PARAMETRES_PISTAGE.match(k)]
+    return urlunsplit(parties._replace(query=urlencode(garder)))
+
+
 def _valider(texte: str, photos: list[Photo], liens: list[Lien]) -> None:
     if not texte.strip() and not photos and not liens:
         raise ErreurEntree("L'entrée est vide.")
@@ -158,7 +169,9 @@ def _valider(texte: str, photos: list[Photo], liens: list[Lien]) -> None:
 def ajouter(texte: str, photos: list[Photo] | None = None, liens: list[Lien] | None = None,
             maintenant: datetime | None = None, fichier: Path | None = None) -> Entree:
     """Ajoute une entrée datée de maintenant à la fin du journal et la renvoie."""
-    photos, liens = photos or [], liens or []
+    photos = photos or []
+    liens = [Lien(url=nettoyer_url(l.url) if RE_LIEN.match(f"[x]({l.url})") else l.url, titre=l.titre)
+             for l in (liens or [])]
     _valider(texte, photos, liens)
     maintenant = maintenant or datetime.now()
     fichier = fichier or config.F_JOURNAL

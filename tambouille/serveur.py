@@ -9,6 +9,9 @@ Routes :
     POST /api/journal           ajoute une entrée  {texte, photos:[{fichier, legende}], liens:[{url, titre}]}
     POST /api/photos            envoie une photo (corps brut, nom dans l'en-tête X-Nom-Fichier)
     GET  /api/onglets           données des onglets Recettes, Idées, Ardoise, Carte
+    GET  /api/digestion         nombre d'entrées à digérer, dernières digestions
+    POST /api/digestion/annuler annule la dernière digestion
+    POST /api/ardoise/preferences  enregistre « Repas à prévoir » et « Cette semaine »
 """
 from __future__ import annotations
 
@@ -21,7 +24,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import unquote, urlparse
 
-from . import config, journal, stockage
+from . import config, digestion, journal, stockage
 
 mimetypes.add_type("font/ttf", ".ttf")
 mimetypes.add_type("image/heic", ".heic")
@@ -103,6 +106,9 @@ class Gestionnaire(BaseHTTPRequestHandler):
             return self._json(200, {"entrees": [e.en_dict(i) for i, e in enumerate(entrees)]})
         if chemin == "/api/onglets":
             return self._json(200, stockage.lire_onglets())
+        if chemin == "/api/digestion":
+            return self._json(200, {"a_digerer": len(digestion.a_digerer()),
+                                    "historique": digestion.historique()[:5]})
         return self._erreur(404, "Page introuvable.")
 
     # ------------------------------------------------------------------ POST
@@ -140,6 +146,24 @@ class Gestionnaire(BaseHTTPRequestHandler):
                 return self._erreur(400, message)
             numero = len(journal.lire()) - 1
             return self._json(201, entree.en_dict(numero))
+
+        if chemin == "/api/digestion/annuler":
+            try:
+                d = digestion.annuler_derniere()
+            except digestion.ErreurDigestion as e:
+                return self._erreur(400, str(e))
+            return self._json(200, {"annulee": d["date"]})
+
+        if chemin == "/api/ardoise/preferences":
+            if not self.headers.get("Content-Type", "").startswith("application/json"):
+                return self._erreur(415, "Format attendu : JSON.")
+            corps = self._lire_corps(config.TAILLE_MAX_REQUETE)
+            try:
+                d = json.loads((corps or b"").decode("utf-8"))
+                a = digestion.enregistrer_preferences_ardoise(d.get("repas_a_prevoir", {}), d.get("contraintes", ""))
+            except (ValueError, AttributeError) as e:
+                return self._erreur(400, str(e) if isinstance(e, digestion.ErreurDigestion) else "Préférences illisibles.")
+            return self._json(200, a)
 
         return self._erreur(404, "Page introuvable.")
 
