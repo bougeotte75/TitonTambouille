@@ -1,0 +1,266 @@
+{
+  "recettes": [
+    {
+      "id": "dahl",
+      "nom": "Dahl de lentilles corail",
+      "categorie": "Plats",
+      "fois": 3,
+      "derniere": "2026-11-04",
+      "saison": {
+        "mois": [
+          10,
+          11,
+          12,
+          1,
+          2,
+          3,
+          4
+        ],
+        "texte": "octobre à avril"
+      },
+      "regime": "Végétarien · végan",
+      "cout": 1,
+      "foyer": {
+        "A": 3,
+        "M": 1,
+        "B": 2
+      },
+      "source": {
+        "titre": "[site de la recette]",
+        "url": "https://exemple.fr/dahl",
+        "date": "2026-10-02"
+      },
+      "pour": "Pour 4",
+      "ingredients": [
+        {
+          "texte": "250 g de lentilles corail"
+        },
+        {
+          "texte": "40 cl de lait de coco"
+        },
+        {
+          "texte": "1 oignon, 2 gousses d'ail"
+        },
+        {
+          "texte": "de gingembre frais",
+          "correction": {
+            "ancien": "1 morceau",
+            "nouveau": "2 morceaux",
+            "date": "2026-10-02"
+          }
+        },
+        {
+          "texte": "d'eau",
+          "correction": {
+            "ancien": "1 l",
+            "nouveau": "50 cl",
+            "date": "2026-11-04"
+          }
+        }
+      ],
+      "etapes": [
+        "[Étape 1, telle qu'écrite dans la source]",
+        "[Étape 2, telle qu'écrite dans la source]",
+        "[Étape 3, telle qu'écrite dans la source]"
+      ],
+      "photos": [],
+      "notes": [
+        {
+          "date": "2026-11-04",
+          "contexte": "en famille · dîner en semaine",
+          "texte": "Au lait de coco. Bon goût mais trop liquide : la prochaine fois, moitié moins d'eau et cuire dix minutes de plus."
+        },
+        {
+          "date": "2026-10-21",
+          "contexte": "avec des amis · dimanche midi",
+          "texte": "Ajouté des épinards à la fin, très bien. Un peu de citron vert au moment de servir."
+        },
+        {
+          "date": "2026-10-02",
+          "contexte": "seule · déjeuner",
+          "texte": "Première fois, recette du site. Un peu fade, prévoir plus de gingembre."
+        }
+      ]
+    },
+    {
+      "id": "gratin",
+      "nom": "Gratin dauphinois",
+      "categorie": "Plats",
+      "fois": 2,
+      "derniere": "2026-10-18",
+      "saison": {
+        "mois": [
+          10,
+          11,
+          12,
+          1,
+          2,
+          3
+        ],
+        "texte": "octobre à mars"
+      },
+      "regime": "Végétarien",
+      "cout": 1,
+      "foyer": {
+        "A": 3,
+        "M": 3,
+        "B": 3
+      },
+      "source": null,
+      "ingredients": [],
+      "etapes": [],
+      "photos": [],
+      "notes": [
+        {
+          "date": "2026-10-18",
+          "contexte": "en famille",
+          "texte": "Parfait avec le poulet."
+        }
+      ]
+    },
+    {
+      "id": "poulet",
+      "nom": "Poulet rôti au citron",
+      "categorie": "Plats",
+      "fois": 5,
+      "derniere": "2026-10-25",
+      "saison": {
+        "mois": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "texte": "toute l'année"
+      },
+      "regime": "",
+      "cout": 2,
+      "foyer": {
+        "A": 3,
+        "M": 3,
+        "B": 2
+      },
+      "source": null,
+      "ingredients": [],
+      "etapes": [],
+      "photos": [],
+      "notes": []
+    },
+    {
+      "id": "asperges",
+      "nom": "Salade d'asperges",
+      "categorie": "Plats",
+      "fois": 1,
+      "derniere": "2026-05-20",
+      "saison": {
+        "mois": [
+          5,
+          6
+        ],
+        "texte": "mai à juin"
+      },
+      "regime": "Végétarien",
+      "cout": 3,
+      "foyer": {},
+      "source": null,
+      "ingredients": [],
+      "etapes": [],
+      "photos": [],
+      "notes": []
+    },
+    {
+      "id": "sables",
+      "nom": "Sablés de maman",
+      "categorie": "Desserts",
+      "fois": 1,
+      "derniere": "2026-10-12",
+      "saison": {
+        "mois": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "texte": "toute l'année"
+      },
+      "regime": "Végétarien",
+      "cout": 1,
+      "foyer": {
+        "A": 3,
+        "M": 3,
+        "B": 3
+      },
+      "source": {
+        "titre": "maman",
+        "url": "",
+        "date": "2026-10-12"
+      },
+      "pour": "",
+      "ingredients": [
+        {
+          "texte": "100 g de farine"
+        },
+        {
+          "texte": "50 g de beurre"
+        },
+        {
+          "texte": "de sucre",
+          "correction": {
+            "ancien": "100 g",
+            "nouveau": "80 g",
+            "date": "2026-10-12"
+          }
+        }
+      ],
+      "etapes": [],
+      "photos": [],
+      "notes": []
+    },
+    {
+      "id": "compote",
+      "nom": "Compote pomme-poire",
+      "categorie": "Desserts",
+      "fois": 4,
+      "derniere": "2026-10-30",
+      "saison": {
+        "mois": [
+          9,
+          10,
+          11,
+          12,
+          1,
+          2
+        ],
+        "texte": "septembre à février"
+      },
+      "regime": "Végétarien · végan",
+      "cout": 1,
+      "foyer": {
+        "A": 2,
+        "M": 3,
+        "B": 3
+      },
+      "source": null,
+      "ingredients": [],
+      "etapes": [],
+      "photos": [],
+      "notes": []
+    }
+  ]
+}

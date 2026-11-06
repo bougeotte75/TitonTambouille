@@ -1,0 +1,29 @@
+{
+  "lieux": [
+    {
+      "nom": "Le libanais du Faubourg",
+      "type": "restaurant",
+      "resume": "5 nov. · 1 entrée · 1 idée : moutabal fumé"
+    },
+    {
+      "nom": "Le comptoir à falafels",
+      "type": "a_emporter",
+      "resume": "29 oct. · 2 entrées"
+    },
+    {
+      "nom": "Le café du coin",
+      "type": "cafe",
+      "resume": "3 nov. · 1 entrée · cookie au sésame"
+    },
+    {
+      "nom": "Marché du samedi",
+      "type": "marche",
+      "resume": "tous les samedis · 6 entrées"
+    },
+    {
+      "nom": "Épicerie indienne",
+      "type": "commerce",
+      "resume": "21 oct. · lentilles, épices du dahl"
+    }
+  ]
+}

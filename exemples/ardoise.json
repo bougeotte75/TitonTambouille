@@ -1,0 +1,102 @@
+{
+  "semaine": "2026-11-09",
+  "repas_a_prevoir": {
+    "soirs": true,
+    "midis_week_end": true,
+    "midis_semaine": false,
+    "entrees": false
+  },
+  "contraintes": "mardi et jeudi pressés ; samedi midi on reçoit",
+  "jours": [
+    {
+      "jour": "Lundi",
+      "repas": [
+        {
+          "moment": "Soir",
+          "plat": "Dahl de lentilles corail",
+          "dessert": "Compote pomme-poire",
+          "raison": "version corrigée : moins d'eau"
+        }
+      ]
+    },
+    {
+      "jour": "Mardi",
+      "repas": [
+        {
+          "moment": "Soir",
+          "plat": "Restes du dahl, riz",
+          "dessert": "Yaourt",
+          "raison": "soir pressé · restes"
+        }
+      ]
+    },
+    {
+      "jour": "Mercredi",
+      "repas": [
+        {
+          "moment": "Soir",
+          "plat": "Shakshuka",
+          "dessert": "Sablés de maman",
+          "raison": "idée à tester · soir tranquille"
+        }
+      ]
+    },
+    {
+      "jour": "Jeudi",
+      "repas": [
+        {
+          "moment": "Soir",
+          "plat": "Soupe de potimarron au gingembre",
+          "dessert": "Compote pomme-poire",
+          "raison": "soir pressé · se prépare d'avance"
+        }
+      ]
+    },
+    {
+      "jour": "Vendredi",
+      "repas": [
+        {
+          "moment": "Soir",
+          "plat": "Velouté de poireaux, tartines",
+          "dessert": "Fromage blanc au miel",
+          "raison": ""
+        }
+      ]
+    },
+    {
+      "jour": "Samedi",
+      "repas": [
+        {
+          "moment": "Midi",
+          "entree": "Moutabal fumé, pain pita · idée à tester",
+          "plat": "Poulet rôti au citron, gratin dauphinois",
+          "dessert": "Sablés de maman",
+          "raison": "on reçoit · valeurs sûres"
+        },
+        {
+          "moment": "Soir",
+          "plat": "Restes du poulet en salade",
+          "dessert": "Yaourt",
+          "raison": ""
+        }
+      ]
+    },
+    {
+      "jour": "Dimanche",
+      "repas": [
+        {
+          "moment": "Midi",
+          "plat": "Dahl aux épinards",
+          "dessert": "Compote pomme-poire",
+          "raison": ""
+        },
+        {
+          "moment": "Soir",
+          "plat": "Soupe de potimarron",
+          "dessert": "Fromage blanc au miel",
+          "raison": ""
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+# Données personnelles : jamais sur GitHub
+donnees/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# macOS
+.DS_Store

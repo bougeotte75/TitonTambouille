@@ -1,0 +1,116 @@
+{
+  "idees": [
+    {
+      "titre": "Moutabal fumé",
+      "source": "vu au resto · libanais rue du Faubourg",
+      "date": "2026-11-05",
+      "note": "Griller l'aubergine directement sur la flamme pour le goût charbonneux.",
+      "type": "resto",
+      "saison": {
+        "mois": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "texte": "toute l'année"
+      },
+      "statut": "a_tester"
+    },
+    {
+      "titre": "Shakshuka",
+      "source": "lu",
+      "date": "2026-11-01",
+      "note": "Pour un dîner tranquille, avec les poivrons qui restent.",
+      "type": "lecture",
+      "saison": {
+        "mois": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "texte": "toute l'année"
+      },
+      "statut": "a_tester"
+    },
+    {
+      "titre": "Pickles d'oignons rouges",
+      "source": "goûté chez des amis",
+      "date": "2026-10-26",
+      "note": "Très acidulés, parfaits sur les tacos. Demander leur recette.",
+      "type": "ailleurs",
+      "saison": {
+        "mois": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "texte": "toute l'année"
+      },
+      "statut": "a_tester"
+    },
+    {
+      "titre": "Tarte fine aux fraises",
+      "source": "vu chez le pâtissier",
+      "date": "2026-10-30",
+      "note": "Pâte feuilletée, crème d'amande très fine, fraises crues.",
+      "type": "boutique",
+      "saison": {
+        "mois": [
+          5,
+          6,
+          7
+        ],
+        "texte": "mai à juillet"
+      },
+      "statut": "a_tester"
+    },
+    {
+      "titre": "Dahl aux épinards",
+      "source": "idée du journal",
+      "date": "2026-10-21",
+      "note": "Ajouter des épinards en fin de cuisson.",
+      "type": "variante",
+      "saison": {
+        "mois": [
+          10,
+          11,
+          12,
+          1,
+          2,
+          3,
+          4
+        ],
+        "texte": "octobre à avril"
+      },
+      "statut": "testee",
+      "recette": "dahl"
+    }
+  ]
+}
